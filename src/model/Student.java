@@ -48,7 +48,9 @@ public class Student extends Person {
     
 
     // setters
-
+    public void setTerm(int term) {
+        this.term = term;
+    }
 
 
     @Override

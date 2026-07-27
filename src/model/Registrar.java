@@ -42,8 +42,8 @@ public class Registrar {
         }
         return topStudents;
     }
-    public List<Student> getStudentsByRegistrar() {
-        List<Student> students = new ArrayList<>(); 
+    public Set<Student> getStudentsByRegistrar() {
+        Set<Student> students = new HashSet<>(); 
         for(Enrollment e : enrollments) {
             students.add(e.getStudent());
         }
@@ -67,6 +67,7 @@ public class Registrar {
         }
         return students;
     }
+    
     public List<Enrollment> getEnrollmentsByCourse(Course course) {
         List<Enrollment> enrollmentsByCourse = new ArrayList<>();
         for(Enrollment e : enrollments) {
@@ -75,6 +76,9 @@ public class Registrar {
             }
         }
         return enrollmentsByCourse;
+    }
+    public List<Enrollment> getEnrollmentsByRegistrar() {
+        return new ArrayList<>(enrollments);
     }
     public void gradeStudent(Teacher teacher, Student student, Course course, double grade)
                              throws UnauthorizedTeacherException, EnrollmentNotFoundException {
@@ -88,26 +92,55 @@ public class Registrar {
         throw new EnrollmentNotFoundException();
          
     }
-    public double calculateGPA(Student student) {
-        double score = 0;
+    public int getCreditsCount(Student student) {
         int creditCount = 0;
         for(Enrollment e : enrollments) {
             if(e.getStudent().equals(student)) {
-                score += (e.getGrade() * e.getCourse().getCredit());
                 creditCount += e.getCourse().getCredit();
             }
         }
+        return creditCount;
+    }
+    public double calculateGPA(Student student) {
+        double score = 0;
+        int creditCount = getCreditsCount(student);
+        for(Enrollment e : enrollments) {
+            if(e.getStudent().equals(student)) {
+                //System.out.println(e.getCourse());
+                score += (e.getGrade() * e.getCourse().getCredit());
+                //System.out.println("score += (" + e.getGrade() + " * " + e.getCourse().getCredit() + ")");
+            }
+        }
+        
         if(creditCount == 0) return 0;
+        //System.out.println("Count: " + creditCount + " score: " + score);
         return score/creditCount;
     }
+    
     public static double calculateAverageOverallGPA(Student student) {
         double GPA = 0;
         int count = 0;
+        int registrarCredits;
         for(Registrar registrar : registrars) {
-            GPA += registrar.calculateGPA(student);
-            count++;
+            registrarCredits = registrar.getCreditsCount(student);
+            GPA += registrar.calculateGPA(student) * registrarCredits;
+            count += registrarCredits;
         }
         if(count == 0) return 0;
+        //System.out.println("Count: " + count + " score: " + GPA);
         return GPA/count;
     }
+    public boolean isPassed(Student student) {
+        return this.calculateGPA(student) >= 12;
+    }
+    public void passStudents() {
+        Set<Student> students = getStudentsByRegistrar();
+        for(Student student : students) {
+            if(isPassed(student))
+                student.setTerm(student.getTerm() + 1);
+        }
+    }
+
+
+   
 }
