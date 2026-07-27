@@ -3,7 +3,7 @@ package model;
 public class Enrollment {
     private Student student;
     private Course course;
-    private int grade;
+    private double grade;
     public Enrollment(Student student, Course course) {
         this.student = student;
         this.course = course;
@@ -17,13 +17,13 @@ public class Enrollment {
     public Course getCourse() {
         return course;
     }
-    public int getGrade() {
+    public double getGrade() {
         return grade;
     }
 
     // setters
 
-    public void setGrade(int grade) {
+    public void setGrade(double grade) {
         this.grade = grade;
     }
 }

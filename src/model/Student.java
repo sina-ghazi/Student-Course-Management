@@ -62,5 +62,9 @@ public class Student extends Person {
         return (this.id == ((Student)object).id);
 
     }
+    @Override
+    public String toString() {
+        return(this.getName() + "#" + this.getFormattedId());
+    }
 }
  

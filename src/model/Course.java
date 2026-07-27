@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public class Course {
         this.name = name;
         this.credit = credit;
         this.capacity = capacity;
-        this.allowedMajors = allowedMajors;
+        this.allowedMajors = new ArrayList<>(allowedMajors);
         this.offeredBy = offeredBy;
         this.teacher = teacher;
         this.courseCode = courseCode;
@@ -56,7 +57,7 @@ public class Course {
         return false;
     } 
     public List<Major> getAllowedMajors() {
-        return allowedMajors;
+        return new ArrayList<>(allowedMajors);
     }
 
     // setters
@@ -81,6 +82,10 @@ public class Course {
         if (this == object) return true;
         if(!(object instanceof Course)) return false;
         return (this.courseCode.equals(((Course)object).courseCode));
+    }
+    @Override 
+    public String toString() {
+        return (this.getName() + "#" + this.getCourseCode());
     }
 
 }

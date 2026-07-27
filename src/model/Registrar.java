@@ -35,7 +35,7 @@ public class Registrar {
     // getters
     public List<Student> getCourseStudentsSortedByGrade(Course course) {
         List<Enrollment> sortedEnrollments = getEnrollmentsByCourse(course);
-        Collections.sort(sortedEnrollments, (e1, e2) -> e2.getGrade() - e1.getGrade());
+        Collections.sort(sortedEnrollments, (e1, e2) -> Double.compare(e2.getGrade(), e1.getGrade()));
         List<Student> topStudents = new ArrayList<>();
         for(Enrollment e : sortedEnrollments) {
             topStudents.add(e.getStudent());
@@ -76,14 +76,17 @@ public class Registrar {
         }
         return enrollmentsByCourse;
     }
-    public void gradeStudent(Teacher teacher, Student student, Course course, int grade) throws UnauthorizedTeacherException{
+    public void gradeStudent(Teacher teacher, Student student, Course course, double grade)
+                             throws UnauthorizedTeacherException, EnrollmentNotFoundException {
         if(!teacher.equals(course.getTeacher())) throw new UnauthorizedTeacherException();
         for(Enrollment e : enrollments) {
             if (e.getCourse().equals(course) && e.getStudent().equals(student)) {
                 e.setGrade(grade);
-                break;
+                return;
             }
         }
+        throw new EnrollmentNotFoundException();
+         
     }
     public double calculateGPA(Student student) {
         double score = 0;

@@ -51,5 +51,9 @@ public class Teacher extends Person {
         if(!(object instanceof Teacher)) return false;
         return (this.id == ((Teacher)object).id);
     }
+    @Override
+    public String toString() {
+        return(this.getName() + "#" + this.getFormattedId());
+    }
 
 }
