@@ -8,6 +8,7 @@ import exception.*;
 public class Registrar {
     
     private List<Enrollment> enrollments = new ArrayList<>();
+    private List<TeacherRating> teacherRatings = new ArrayList<>();
     private static List<Registrar> registrars = new ArrayList<>();
     public Registrar() {
         registrars.add(this);
@@ -30,6 +31,29 @@ public class Registrar {
         return false;
     }
     
+    public void rateTeacher(Teacher teacher, Student student, int rate)
+                             throws AlreadyRatedException, IllegalArgumentException,
+                                     NoClassHistoryWithTeacherException {
+        if(rate < 0 || rate > 5) 
+            throw new IllegalArgumentException("Invalid number, rating should be between 0 - 5"); 
+        if(!hasStudentTakenClassWithTeacher(student, teacher)) 
+            throw new NoClassHistoryWithTeacherException(student, teacher);
+        if(isStudentAlreadyRateTeacher(student, teacher)) throw new AlreadyRatedException(teacher, student);
+        
+        teacherRatings.add(new TeacherRating(teacher, student, rate));
+    } 
+
+    private boolean isStudentAlreadyRateTeacher(Student student, Teacher teacher) {
+        for(TeacherRating t : teacherRatings) {
+            if(t.getStudent().equals(student) && t.getTeacher().equals(teacher))
+                return true;
+        }
+        return false;
+    }  
+
+    private boolean hasStudentTakenClassWithTeacher(Student student, Teacher teacher) {
+        return (getStudentsByTeacher(teacher).contains(student));
+    }
     
     // private List<Student> return
     // getters
@@ -101,6 +125,15 @@ public class Registrar {
         }
         return creditCount;
     }
+    public int getRatingsCount(Teacher teacher) {
+        int ratingsCount = 0;
+        for(TeacherRating t : teacherRatings) {
+            if(t.getTeacher().equals(teacher)) {
+                ratingsCount++;
+            }
+        }
+        return ratingsCount;
+    }
     public double calculateGPA(Student student) {
         double score = 0;
         int creditCount = getCreditsCount(student);
@@ -130,6 +163,30 @@ public class Registrar {
         //System.out.println("Count: " + count + " score: " + GPA);
         return GPA/count;
     }
+    public double calculateAverageRating(Teacher teacher) {
+        double allScores = 0;
+        int count = 0;
+        for(TeacherRating t : teacherRatings) {
+            if(t.getTeacher().equals(teacher)) {
+                allScores += t.getRate();
+                count++;
+            }
+        }
+        if (count == 0) return 0;
+        return allScores / count;
+    }
+    
+    public double calculateOverallAverageRating(Teacher teacher) {
+        int allScore = 0;
+        int count = 0;
+        int registrarRatingsCount;
+        for (Registrar registrar : registrars) {
+            registrarRatingsCount = registrar.getRatingsCount(teacher);
+            allScore += registrar.calculateAverageRating(teacher) * registrarRatingsCount;
+            count += registrarRatingsCount;
+        }
+        return (double)allScore / count;
+    }
     public boolean isPassed(Student student) {
         return this.calculateGPA(student) >= 12;
     }
@@ -140,7 +197,11 @@ public class Registrar {
                 student.setTerm(student.getTerm() + 1);
         }
     }
-
+    public boolean isTopStudent(Student student) {
+        return (calculateGPA(student) >= 17);
+    }
+    
+    
 
    
 }

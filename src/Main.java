@@ -1,6 +1,7 @@
 import model.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import exception.*;
@@ -13,10 +14,8 @@ public class Main {
         Teacher firstT = new Teacher("Morteza", "Jani", Department.MATHEMATICS);
         Teacher secondT = new Teacher("Ahmad", "Rezayi", Department.ELECTRICAL_AND_COMPUTER_ENGINEERING);
         Teacher thirdT = new Teacher("Rashid", "Rashidi", Department.PHYSICS);
-        List<Major> allowedMajors = new ArrayList<>();
-        for (Major m : Major.values()) {
-            allowedMajors.add(m);
-        }
+        List<Major> allowedMajors = new ArrayList<>(Arrays.asList(Major.values()));
+        
         Course math1 = new Course("Math_1", 3, 3, allowedMajors,
                                 Department.ELECTRICAL_AND_COMPUTER_ENGINEERING, firstT, "M101");
         Course math2 = new Course("Math_2", 3, 3, allowedMajors,
@@ -80,10 +79,8 @@ public class Main {
 
         // second registrar
         Registrar fallTerm = new Registrar();
-        allowedMajors.clear();
-        for (Major m : Major.values()) {
-            allowedMajors.add(m);
-        }
+        
+        allowedMajors = new ArrayList<>(Arrays.asList(Major.values()));
         Course physics2 = new Course("Physics_2", 3, 3, allowedMajors,
                             Department.PHYSICS, thirdT, "PHY201");
         allowedMajors.clear();
@@ -122,5 +119,32 @@ public class Main {
 
         System.out.println("Student " + fourthS + " Overall GPA :" + Registrar.calculateAverageOverallGPA(fourthS));
         
+        try{
+            fallTerm.rateTeacher(thirdT, secondS, 4);
+            System.out.println(secondS.getName() + " rated " + thirdT.getName());
+            fallTerm.rateTeacher(thirdT, thirdS, 3);
+            System.out.println(thirdS.getName() + " rated " + thirdT.getName());
+            fallTerm.rateTeacher(thirdT, fourthS, 5);
+            System.out.println(fourthS.getName() + " rated " + thirdT.getName());
+            fallTerm.rateTeacher(secondT, fourthS, 4);
+            System.out.println(fourthS.getName() + " rated " + secondT.getName());
+            fallTerm.rateTeacher(secondT, firstS, 2);
+            System.out.println(secondS.getName() + " rated " + firstT.getName());
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        try{
+            fallTerm.rateTeacher(thirdT, fourthS, 6);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        try{
+            fallTerm.rateTeacher(thirdT, fourthS, 3);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+          
+         
     }
 }

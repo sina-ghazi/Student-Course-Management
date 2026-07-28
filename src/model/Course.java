@@ -51,13 +51,16 @@ public class Course {
     }
     public boolean isMajorAllowed(Major major) {
         for (Major m : allowedMajors) {
-            if (m.equals(major))
+            if (m == major)
                 return true;
         }
         return false;
     } 
     public List<Major> getAllowedMajors() {
         return new ArrayList<>(allowedMajors);
+    }
+    public Department getDepartment() {
+        return offeredBy;
     }
 
     // setters

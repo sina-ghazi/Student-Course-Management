@@ -8,7 +8,7 @@ public class Teacher extends Person {
     private static int idCounter;
     private int id;
     private Department department;
-    private List<Integer> ratings = new ArrayList<>();
+    
    
     public Teacher(String firstName, String lastName, Department department) {
         this.firstName = firstName;
@@ -16,9 +16,7 @@ public class Teacher extends Person {
         this.department = department;
         this.id = idCounter++;
     }
-    public void rate(int score) {}
-   // public void gradeStudent(Enrollment enrollment, int score) {}
-    private int calculateAverageRating() {return 0;}
+   
 
     // getters 
     public String getName() {
@@ -33,12 +31,8 @@ public class Teacher extends Person {
     public Department getDepartment() {
         return department;
     }
-    public List<Integer> getRatings() {
-        return ratings;
-    }
-    public int getAverageRating() {
-        return calculateAverageRating();
-    }
+    
+  
 
 
     @Override
