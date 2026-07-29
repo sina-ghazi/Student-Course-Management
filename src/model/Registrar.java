@@ -2,6 +2,8 @@ package model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import exception.*;
@@ -59,7 +61,7 @@ public class Registrar {
     // getters
     public List<Student> getCourseStudentsSortedByGrade(Course course) {
         List<Enrollment> sortedEnrollments = getEnrollmentsByCourse(course);
-        Collections.sort(sortedEnrollments, (e1, e2) -> Double.compare(e2.getGrade(), e1.getGrade()));
+        sortedEnrollments.sort((e1, e2) -> Double.compare(e2.getGrade(), e1.getGrade()));
         List<Student> topStudents = new ArrayList<>();
         for(Enrollment e : sortedEnrollments) {
             topStudents.add(e.getStudent());
@@ -162,6 +164,20 @@ public class Registrar {
         if(count == 0) return 0;
         //System.out.println("Count: " + count + " score: " + GPA);
         return GPA/count;
+    }
+    public static List<Student> getAllStudentsSortedByOverallGPA() {
+        Set<Student> allStudentsSet = new HashSet<>();
+        for(Registrar registrar : registrars) {
+            allStudentsSet.addAll(registrar.getStudentsByRegistrar());
+        }
+        List<Student> allStudentsList = new ArrayList<>(allStudentsSet);
+        Map<Student, Double> studentOverallGPA = new HashMap<>();
+        for(Student student : allStudentsList) {
+            studentOverallGPA.put(student, Registrar.calculateAverageOverallGPA(student));
+        } 
+        allStudentsList.sort((student1, student2) ->
+                                Double.compare(studentOverallGPA.get(student2), studentOverallGPA.get(student1)));
+        return allStudentsList;
     }
     public double calculateAverageRating(Teacher teacher) {
         double allScores = 0;
