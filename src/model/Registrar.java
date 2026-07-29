@@ -1,6 +1,5 @@
 package model;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
@@ -201,6 +200,7 @@ public class Registrar {
             allScore += registrar.calculateAverageRating(teacher) * registrarRatingsCount;
             count += registrarRatingsCount;
         }
+        if(count == 0) return 0;
         return (double)allScore / count;
     }
     public boolean isPassed(Student student) {

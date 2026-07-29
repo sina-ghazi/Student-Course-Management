@@ -60,8 +60,8 @@ public class Student extends Person {
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof Student)) return false;
-        return (this.id == ((Student)object).id);
+        if(!(object instanceof Student otherStudent)) return false;
+        return (this.id == otherStudent.id);
 
     }
     @Override

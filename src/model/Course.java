@@ -83,8 +83,8 @@ public class Course {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if(!(object instanceof Course)) return false;
-        return (this.courseCode.equals(((Course)object).courseCode));
+        if(!(object instanceof Course otherCourse)) return false;
+        return (this.courseCode.equals(otherCourse.courseCode));
     }
     @Override 
     public String toString() {

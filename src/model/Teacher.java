@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Teacher extends Person {
@@ -42,8 +40,8 @@ public class Teacher extends Person {
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
-        if(!(object instanceof Teacher)) return false;
-        return (this.id == ((Teacher)object).id);
+        if(!(object instanceof Teacher otherTeacher)) return false;
+        return (this.id == otherTeacher.id);
     }
     @Override
     public String toString() {
